@@ -3,6 +3,8 @@ BEGIN{
     CSVFILE = "";
     FS = "\t";
     curpoint = 0;
+    curxgap = 0;
+    curygap = 0;
     curchar = "";
 }
 {
@@ -17,12 +19,24 @@ BEGIN{
         i = 1;
     }
     if (CSVFILE == ""){
-        i++;
-        recno[i] = $1;
-        field[i] = $2;
-        point[i] = $3;
-        x[i] = $4;
-        y[i] = $5;
+        if ($0 ~ /^#/){
+            /* do nothing */;
+        }else{
+            i++;
+            recno[i] = $1;
+            field[i] = $2;
+            point[i] = $3;
+            x[i] = $4;
+            y[i] = $5;
+            xgap[i] = $6;
+            if (xgap[i] == ""){
+                xgap[i] = 0;
+            }
+            ygap[i] = $7;
+            if (ygap[i] == ""){
+                ygap[i] = 0;
+            }
+        }
     }else{
         in_recno++;
         for (/* do nothing */; i <= maxdef; i++){
@@ -30,12 +44,16 @@ BEGIN{
                 if ($field[i] ~ /^\(.*\)$/){
                     if (curpoint != point[i] || curchar != "CHAR"){
                         printf("%d FONT_NORMAL setChar\n", point[i]);
+                        printf("/SYS_drawText_Xgap %d def\n", xgap[i]);
+                        printf("/SYS_drawText_Ygap %d def\n", ygap[i]);
                         curpoint = point[i];
                         curchar = "CHAR";
                     }
                 }else{
                     if (curpoint != point[i] || curchar != "KANJI"){
                         printf("%d KFONT_RYUMIN setKanjiChar\n", point[i]);
+                        printf("/SYS_drawText_Xgap %d def\n", xgap[i]);
+                        printf("/SYS_drawText_Ygap %d def\n", ygap[i]);
                         curpoint = point[i];
                         curchar = "KANJI";
                     }

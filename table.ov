@@ -9,6 +9,8 @@
 %
 % 10 KFONT_GOTHIC setKanjiChar
 10 FONT_NORMAL setChar
+0 setXgap
+0 setYgap
 1 0 (No.) drawText
 6 0 (Name) drawText
 27 0 (Sex) drawText

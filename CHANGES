@@ -1,2 +1,16 @@
-0.1: 2000.02.24 first release
-1.0: 2003.08.11 second release
+0.1: 2000.02.24 first release.
+1.0: 2003.08.11 second release.
+1.1: 2008.05.27 fix README typo.
+                add environment variable for -text option.
+                  o PROV_ANK_POINT
+                  o PROV_ANK_XGAP
+                  o PROV_ANK_YGAP
+                  o PROV_KANJI_POINT
+                  o PROV_KANJI_XGAP
+                  o PROV_KANJI_YGAP
+                add new macro for overlay.
+                  o setXgap
+                  o setYgap
+                add new parameter(x_gap, y_gap) for format definition.
+                you can add comment line which is started with `#' to format definition file.
+                add gsave at top and grestore at end of generated postscript file.

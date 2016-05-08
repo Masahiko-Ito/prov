@@ -1,5 +1,5 @@
-prov-1.0 -- print overlay utilities
-Copyright (C) 2003  Masahiko Ito
+prov-1.1 -- print overlay utilities
+Copyright (C) 2008  Masahiko Ito
 
 These programs is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@ along with these programs; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Mail suggestions and bug reports for these programs to
-m-ito@mbox.kyoto-inet.or.jp
+m-ito@myh.no-ip.org
 
 What is prov ?
 ==============
@@ -49,6 +49,15 @@ Sample print(1)
 
   above operation printout README(this document) overlayed
   mesh.ov(mesh overlay definition) from ps-printer.
+  default point of ank is 12point and default point of kanji char is 12point too.
+  you can change default point by setting environment variable.
+
+  o PROV_ANK_POINT    (default 12)
+  o PROV_KANJI_POINT  (default 12)
+  o PROV_ANK_XGAP     (default 0)
+  o PROV_ANK_YGAP     (default 0)
+  o PROV_KANJI_XGAP   (default 2)
+  o PROV_KANJI_YGAP   (default 0)
 
 Sample print(2)
 ===============
@@ -176,6 +185,14 @@ Overlay definition
 
     set kanji charset.
 
+  o GAP setXgap
+
+    set x-gap between chars.
+
+  o GAP setYgap
+
+    set y-gap between chars.
+
   o X Y (TEXT) drawText
 
     draw text with ank charset. (X,Y) mean (left,top) of charcter.
@@ -190,7 +207,7 @@ format definition
   format print layout from csv data file. each line of format definition
   is defined like following.
 
-  o record_no field_no point column line
+  o record_no field_no point column line x_gap y_gap
 
     record_no : set record number. usually record_no is 1, but a page is 
                 formatted from multi record, over 2 are used too.
@@ -198,15 +215,17 @@ format definition
     point     : set character point.
     column    : set print column position.
     line      : set print line position.
+    x_gap     : set x gap between chars
+    y_gap     : set y gap between chars
 
   field separater of format definition file is TAB.
 
-cvs data file
+csv data file
 =============
   
-  o field separater of cvs data file is TAB.
+  o field separater of csv data file is TAB.
   o a field can't hold ank/kanji together.
 
 -- 
-Masahiko Ito <m-ito@mbox.kyoto-inet.or.jp>
+Masahiko Ito <m-ito@myh.no-ip.org>
 http://myh.no-ip.org/~prov/

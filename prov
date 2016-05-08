@@ -23,6 +23,11 @@ fi
 #
 case $1 in
 -text)
+    if [ "X${PROV_KANJI_XGAP}" = "X" ]
+    then
+        PROV_KANJI_XGAP=2;export PROV_KANJI_XGAP
+    fi
+#
     ${NKF} $2 |\
     expand -t 8 |\
     ${BINDIR}/k2c >/tmp/prov.$$
@@ -34,6 +39,7 @@ case $1 in
         expand -t 8 |\
         ${BINDIR}/t2p -l `grep '^/SYS_MaxHeight *[0-9]* *def' ${PROVPS}|head -1|sed -e 's/^\/SYS_MaxHeight *//' -e 's/ *def$//'`|\
         ${BINDIR}/ovps ${PROVPS} /tmp/prov.$$
+        echo "grestore"
     done
     rm /tmp/prov.$$
     ;;
@@ -51,6 +57,7 @@ case $1 in
         ${BINDIR}/k2c |\
         awk -f ${AWKDIR}/csv2ps.awk $deffile - |\
         ${BINDIR}/ovps ${PROVPS} /tmp/prov.$$
+        echo "grestore"
     done
     rm /tmp/prov.$$
     ;;
