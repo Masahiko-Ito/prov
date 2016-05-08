@@ -1,0 +1,16 @@
+%
+0 0.2 72 11.2 2 drawBox
+0 1.2 72 1.2 1 0 1 10 drawRepeatLine
+%
+5 0.2 5 11.2 1 drawLine
+26 0.2 26 11.2 1 drawLine
+30 0.2 30 11.2 1 drawLine
+41 0.2 41 11.2 1 drawLine
+%
+10 KFONT_GOTHIC setKanjiChar
+% 10 FONT_NORMAL setChar
+1 0 <番号> drawText
+6 0 <氏名> drawText
+27 0 <性別> drawText
+31 0 <生年月日> drawText
+42 0 <住所> drawText

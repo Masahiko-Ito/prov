@@ -1,0 +1,223 @@
+prov-1.0 -- print overlay utilities
+Copyright (C) 2003  Masahiko Ito
+
+These programs is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+These programs is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with these programs; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+Mail suggestions and bug reports for these programs to
+m-ito@mbox.kyoto-inet.or.jp
+
+provとは何か?
+=============
+
+  UNIX系システム上で利用できるフォームオーバレイ印字ツールです。
+
+前提条件
+========
+
+  postscript形式ファイルを印字できる環境が既に構築されていること。
+
+インストール
+============
+
+  o Makefileを編集しPROVDIRマクロにインストール先ディレクトリをセット
+    します。デフォルトのインストールディレクトリは~/provです。
+  o make
+  o make install
+  o ~/.profile等を編集してPROVDIR環境変数にインストール先ディレクトリを
+    セットする。
+  o ~/.profile等を編集してPATH環境変数に${PROVDIR}/binを追加する。
+
+サンプル印字(1)
+===============
+
+  prov -text mesh.ov README.jp | lpr -Pps-printer
+
+  or
+
+  cat README.j | prov -text mesh.ov - | lpr -Pps-printer
+
+  上記の操作で、README.jp(この文書)にmesh.ov(網掛けオーバレイ)を重ねて
+  ps-printerから印字します。
+
+サンプル印字(2)
+===============
+
+  prov -csv table.ov member.def member.dat | lpr -Pps-printer
+
+  or
+
+  cat member.dat | prov -csv table.ov member.def - | lpr -Pps-printer
+
+  上記の操作で、member.dat(csv形式データファイル)をmember.def(フォーマット
+  定義ファイル)の定義に従ってフォーマットし、table.ov(テーブルオーバレイ定義)
+  を重ねてps-printerから印字します。
+
+印字調整
+========
+
+  印字調整を${PROVDIR}/etc/a4v.ps内の定義を編集する事で行えます。
+
+% start user definition
+%------------------------------------------------------------------
+% < X unit length (point) >
+%
+% オーバレイ定義、帳票フォーマット定義中で指定する座標系のX軸の単位長を
+% 指定します。デフォルトは72/10ポイント(=1/10インチ)です。
+%
+/SYS_Char {72.00 10 div} def
+%
+%------------------------------------------------------------------
+% < Y unit length (point) >
+%
+% オーバレイ定義、帳票フォーマット定義中で指定する座標系のY軸の単位長を
+% 指定します。デフォルトは72/6ポイント(=1/6インチ)です。
+%
+/SYS_Line {72.00  6 div} def
+%
+%------------------------------------------------------------------
+% < X bias (Char) >
+%
+% ページ全体のX軸方向の印字位置調整に使用します。
+% 右にずらす : 正数で指定
+% 左にずらす : 負数で指定
+%
+% for FUJITSU XL-5340
+%/SYS_Xbias {2 SYS_Char mul} def
+%
+/SYS_Xbias {0 SYS_Char mul} def
+%
+%------------------------------------------------------------------
+% < Y bias (Line) >
+% 
+% ページ全体のY軸方向の印字位置調整に使用します。
+% 下にずらす : 正数で指定
+% 上にずらす : 負数で指定
+%
+% for FUJITSU XL-5340
+%/SYS_Ybias {-2 SYS_Line mul} def
+%
+/SYS_Ybias {0 SYS_Line mul} def
+%
+%------------------------------------------------------------------
+% < max printable width (Char) >
+%
+% 最大印字幅をSYS_Char単位で指定します。
+%
+/SYS_MaxWidth 80 def
+%
+%------------------------------------------------------------------
+% < max printable height (Line) >
+%
+% 最大印字行数をSYS_Line単位で指定します。
+%
+/SYS_MaxHeight 66 def
+%
+%------------------------------------------------------------------
+% end user definition
+
+カスタマイズ
+============
+
+ デフォルトの${PROVDIR}/etc/a4v.psはA4縦の用紙が前提になってます。これ以外の
+ 用紙を利用したい場合はa4v.psをコピーしてカスタマイズしてください。そして、
+ カスタマイズしたファイルを利用する場合は、そのファイルを環境変数PROVPSに
+ 設定してprovコマンドを利用してください。
+
+ (例) B4縦の用紙を利用したい場合
+
+  o cp ${PROVDIR}/etc/a4v.ps ./b4v.ps
+  o vi ./b4v.ps # B4縦用に編集
+  o PROVPS=./b4v.ps prov -text foo.ov foo.txt | lpr -Pps-printer
+
+オーバレイ定義
+==============
+
+  以下のポストスクリプトマクロを使ってオーバレイを定義します。
+
+  o DASH setLineStyle (DASH is 0 or 1 or ... )
+
+    線種を指定します。DASH=0は実線、DASH≧1破線となり、DASHの値が大きい程、
+    粗い破線となります。
+
+  o GRAY setGrayScale (GRAY is 0 to 1)
+
+    印字の濃さを指定します。0=黒 -> 0.5=灰色 -> 1=白。
+  
+  o X0 Y0 X1 Y1 WIDTH drawLine
+
+    (X0,Y0)から(X1,Y1)にWIDTHの太さの線を描きます。
+    (X0,Y0),(X1,Y1)は(文字,行)座標系です。
+    WIDTHはポイント指定です。
+
+  o X0 Y0 X1 Y1 WIDTH XDELTA YDELTA REPEAT drawRepeatLine
+
+    (X0,Y0)-(X1,Y1)からX座標をXDELTA,Y座標をYDELTAだけ増分しながらREPEAT回数、
+    線を描きます。
+
+  o X0 Y0 X1 Y1 WIDTH drawBox
+
+    WIDTHの太さの線で(X0,Y0)-(X1,Y1)を対角線とする四角を描きます。
+      
+  o X0 Y0 X1 Y1 fillBox
+
+    (X0,Y0)-(X1,Y1)を対角線とする四角を描き、中を塗りつぶします。
+
+  o POINT FONT_NORMAL setChar
+          FONT_ITALIC
+          FONT_BOLD
+          FONT_BOLDITALIC
+
+    (いわゆる)半角文字種を指定します。
+
+  o POINT KFONT_RYUMIN setKanjiChar
+          KFONT_RYUMIN_V
+          KFONT_GOTHIC
+          KFONT_GOTHIC_V
+
+    (いわゆる)全角文字種を指定します。
+
+  o X Y (TEXT) drawText
+
+    半角文字列を描きます。(X,Y)	は文字列の(左,上)を指します。
+
+  o X Y <KANJI_TEXT> drawText
+
+    全角文字列を描きます。(X,Y)	は文字列の(左,上)を指します。
+
+帳票フォーマット定義
+====================
+
+  cvs形式データの各フィールドの帳票上での配置等を定義します。
+
+  o レコード番号△フィールド番号△ポイント△カラム△ライン
+
+    レコード番号   : 通常は1をセットする。1ページのレイアウトを複数のcsv形式
+                     データレコードで構成する場合は2以上の指定もできる。
+    フィールド番号 : csv形式データレコード内のフィールドを指定する。1オリジン。
+    ポイント       : 印字のポイント数を指定する。
+    カラム         : 印字開始のカラム位置を指定する。
+    ライン         : 印字開始のライン位置を指定する。
+
+  各フィールドのセパレータはTABである。
+
+cvs形式データファイル
+=====================
+  
+  o 各フィールドのセパレータはTABである。
+  o 各フィールドに半角文字/全角文字の混在は不可能である。
+
+-- 
+Masahiko Ito <m-ito@mbox.kyoto-inet.or.jp>
+http://myh.no-ip.org/~prov/

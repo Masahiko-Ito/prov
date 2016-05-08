@@ -1,0 +1,55 @@
+%
+% overlay mesh on A4, portrait paper
+%
+% set mesh gray scale
+%
+0 setGrayScale
+%
+% set 0 to OV_LINE
+%
+/OV_LINE 0 def
+%
+% repeat 67 times { ... }
+%
+67 {
+%
+% line (0,OV_LINE)-(80,OV_LINE)
+%
+    0 OV_LINE 80 OV_LINE 1 drawLine
+%
+% down mesh to 2 line
+%
+    OV_LINE 1 add
+%
+% set OV_LINE
+%
+    /OV_LINE exch def
+} repeat
+%
+% set 0 to OV_COL
+%
+/OV_COL 0 def
+%
+% repeat 81 times { ... }
+%
+81 {
+%
+% line (OV_COL,0)-(OV_COL,66)
+%
+    OV_COL 0 OV_COL 66 1 drawLine
+%
+% down mesh to 2 line
+%
+    OV_COL 1 add
+%
+% set OV_COL
+%
+    /OV_COL exch def
+} repeat
+%
+% reset gray scale
+%
+0 setGrayScale
+%
+%
+%

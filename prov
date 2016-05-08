@@ -1,0 +1,63 @@
+#! /bin/sh
+#
+# Usage: prov -text OVERLAY TEXTFILE ...
+#        prov -csv OVERLAY DEFFILE CSVFILE ...
+#
+# nkf is Network Kanji Filter (code converter)
+NKF="nkf -X -e"
+#NKF="cat"
+#
+if [ "X${PROVDIR}" = "X" ]
+then
+    PROVDIR=/usr/local/prov;export PROVDIR
+fi
+#
+AWKDIR=${PROVDIR}/awk
+BINDIR=${PROVDIR}/bin
+ETCDIR=${PROVDIR}/etc
+#
+if [ "X${PROVPS}" = "X" ]
+then
+    PROVPS=${ETCDIR}/a4v.ps;export PROVPS
+fi
+#
+case $1 in
+-text)
+    ${NKF} $2 |\
+    expand -t 8 |\
+    ${BINDIR}/k2c >/tmp/prov.$$
+    shift 2
+    for i in $*
+    do 
+        input=`echo $i | sed -e 's/^-$//'`
+        ${NKF} ${input} |\
+        expand -t 8 |\
+        ${BINDIR}/t2p -l `grep '^/SYS_MaxHeight *[0-9]* *def' ${PROVPS}|head -1|sed -e 's/^\/SYS_MaxHeight *//' -e 's/ *def$//'`|\
+        ${BINDIR}/ovps ${PROVPS} /tmp/prov.$$
+    done
+    rm /tmp/prov.$$
+    ;;
+-csv)
+    ${NKF} $2 |\
+    expand -t 8 |\
+    ${BINDIR}/k2c >/tmp/prov.$$
+    deffile=$3
+    shift 3
+    for i in $*
+    do 
+        input=`echo $i | sed -e 's/^-$//'`
+        ${NKF} ${input} |\
+        ${BINDIR}/brckt |\
+        ${BINDIR}/k2c |\
+        awk -f ${AWKDIR}/csv2ps.awk $deffile - |\
+        ${BINDIR}/ovps ${PROVPS} /tmp/prov.$$
+    done
+    rm /tmp/prov.$$
+    ;;
+*)
+    echo "Usage: prov -text OVERLAY TEXTFILE ..."
+    echo "       prov -csv OVERLAY DEFFILE CSVFILE ..."
+    echo ""
+    echo "TEXTFILE,CSVFILE : - mean stdin."
+    ;;
+esac

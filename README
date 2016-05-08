@@ -1,0 +1,212 @@
+prov-1.0 -- print overlay utilities
+Copyright (C) 2003  Masahiko Ito
+
+These programs is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+These programs is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with these programs; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+Mail suggestions and bug reports for these programs to
+m-ito@mbox.kyoto-inet.or.jp
+
+What is prov ?
+==============
+
+  This is form overlay printing tool on UNIX-like systems.
+
+prerequisite
+============
+
+  You must be able to print postscript file.
+
+Install
+=======
+
+  o edit Makefile to set install directory to PROVDIR macro
+    default install directory is ~/prov.
+  o make
+  o make install
+  o edit ~/.profile to set install directory to PROVDIR environment variable.
+  o edit ~/.profile to set ${PROVDIR}/bin to PATH environment variable.
+
+Sample print(1)
+===============
+
+  prov -text mesh.ov README | lpr -Pps-printer
+
+  or
+
+  cat README | prov -text mesh.ov - | lpr -Pps-printer
+
+  above operation printout README(this document) overlayed
+  mesh.ov(mesh overlay definition) from ps-printer.
+
+Sample print(2)
+===============
+
+  prov -csv table.ov member.def member.dat | lpr -Pps-printer
+
+  or
+
+  cat member.dat | prov -csv table.ov member.def - | lpr -Pps-printer
+
+  above operation printout member.dat(csv data file) formatted by
+  member.def(format definition) and overlayed table.ov(table overlay
+  definition) from ps-printer.
+
+Adjust setting
+==============
+
+  You can adjust setting by editing ${PROVDIR}/etc/a4v.ps.
+
+% start user definition
+%------------------------------------------------------------------
+% < X unit length (point) >
+%
+% default is 72/10 point (=1/10 inch).
+%
+/SYS_Char {72.00 10 div} def
+%
+%------------------------------------------------------------------
+% < Y unit length (point) >
+%
+% default is 72/6 point (=1/6 inch).
+%
+/SYS_Line {72.00  6 div} def
+%
+%------------------------------------------------------------------
+% < X bias (Char) >
+%
+% move page to right : plus value
+% move page to left  : minus value
+%
+% for FUJITSU XL-5340
+%/SYS_Xbias {2 SYS_Char mul} def
+%
+/SYS_Xbias {0 SYS_Char mul} def
+%
+%------------------------------------------------------------------
+% < Y bias (Line) >
+% 
+% move page to down : plus value
+% move page to up   : minus value
+%
+% for FUJITSU XL-5340
+%/SYS_Ybias {-2 SYS_Line mul} def
+%
+/SYS_Ybias {0 SYS_Line mul} def
+%
+%------------------------------------------------------------------
+% < max printable width (Char) >
+%
+/SYS_MaxWidth 80 def
+%
+%------------------------------------------------------------------
+% < max printable height (Line) >
+%
+/SYS_MaxHeight 66 def
+%
+%------------------------------------------------------------------
+% end user definition
+
+Customize
+=========
+
+ In default ${PROVDIR}/etc/a4v.ps is for A4-porrait paper. if you want to
+ use another paper, copy ${PROVDIR}/etc/a4v.ps to another.ps and edit it and
+ set path to another.ps into PROVPS(environment variable).
+
+ ex. 
+
+  o cp ${PROVDIR}/etc/a4v.ps ./another.ps
+  o vi ./another.ps # edit for another paper
+  o PROVPS=./another.ps prov -text foo.ov foo.txt | lpr -Pps-printer
+
+Overlay definition
+==================
+
+  You can use following postscript macro to define overlay.
+
+  o DASH setLineStyle (DASH is 0 or 1 or ... )
+
+    set line style (solid, dash etc). DASH=0 mean solid line, DASH>=1 mean dash line.
+
+  o GRAY setGrayScale (GRAY is 0 to 1)
+
+    set gray scale. 0=black -> 0.5=gray -> 1=white.
+  
+  o X0 Y0 X1 Y1 WIDTH drawLine
+
+    draw line between (X0,Y0) to (X1,Y1) with WIDTH width.
+    (X0,Y0),(X1,Y1) are (character,line) coordinate.
+    WIDTH is point.
+
+  o X0 Y0 X1 Y1 WIDTH XDELTA YDELTA REPEAT drawRepeatLine
+
+    repeat to draw line from (X0,Y0)-(X1,Y1) REPEAT times with increasing XDELTA and YDELTA.
+
+  o X0 Y0 X1 Y1 WIDTH drawBox
+
+    draw box with WIDTH width.
+      
+  o X0 Y0 X1 Y1 fillBox
+
+    draw box and fill inside.
+
+  o POINT FONT_NORMAL setChar
+          FONT_ITALIC
+          FONT_BOLD
+          FONT_BOLDITALIC
+
+    set ank charset.
+
+  o POINT KFONT_RYUMIN setKanjiChar
+          KFONT_RYUMIN_V
+          KFONT_GOTHIC
+          KFONT_GOTHIC_V
+
+    set kanji charset.
+
+  o X Y (TEXT) drawText
+
+    draw text with ank charset. (X,Y) mean (left,top) of charcter.
+
+  o X Y <KANJI_TEXT> drawText
+
+    draw text with kanji charset. (X,Y) mean (left,top) of charcter.
+
+format definition
+=================
+
+  format print layout from csv data file. each line of format definition
+  is defined like following.
+
+  o record_no field_no point column line
+
+    record_no : set record number. usually record_no is 1, but a page is 
+                formatted from multi record, over 2 are used too.
+    field_no  : set field number from csv data file record.
+    point     : set character point.
+    column    : set print column position.
+    line      : set print line position.
+
+  field separater of format definition file is TAB.
+
+cvs data file
+=============
+  
+  o field separater of cvs data file is TAB.
+  o a field can't hold ank/kanji together.
+
+-- 
+Masahiko Ito <m-ito@mbox.kyoto-inet.or.jp>
+http://myh.no-ip.org/~prov/

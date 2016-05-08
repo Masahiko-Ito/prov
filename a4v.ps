@@ -1,0 +1,197 @@
+%!
+% start user definition
+%
+% < X unit length (point) >
+%
+/SYS_Char {72.00 10 div} def
+%
+% < Y unit length (point) >
+%
+/SYS_Line {72.00  6 div} def
+%
+% < X bias (Char) >
+%
+% for FUJITSU XL-5340
+%/SYS_Xbias {2 SYS_Char mul} def
+%
+/SYS_Xbias {0 SYS_Char mul} def
+%
+% < Y bias (Line) >
+%
+% for FUJITSU XL-5340
+%/SYS_Ybias {-2 SYS_Line mul} def
+%
+/SYS_Ybias {0 SYS_Line mul} def
+%
+% < max printable width (Char) >
+%
+/SYS_MaxWidth 80 def
+%
+% < max printable height (Line) >
+%
+/SYS_MaxHeight 66 def
+%
+% end user definition
+%
+%----------------------------------------------------------------------
+%
+% start system definition
+%
+% CHAR c2p ... convert Char to point
+%
+/c2p {
+    /SYS_c2p_CHAR_X exch def
+    SYS_c2p_CHAR_X SYS_Char mul
+    SYS_Xbias add
+} def
+%
+% LINE l2p ... convert Line to point
+%
+/l2p {
+    /SYS_l2p_LINE_Y exch def
+    SYS_MaxHeight SYS_Line mul
+    SYS_Ybias sub
+    SYS_l2p_LINE_Y SYS_Line mul
+    sub
+} def
+%
+% DASH setLineStyle (DASH is 0 or 1 or ... )
+%
+/setLineStyle {
+    /SYS_setLineStyle_DASH exch def
+    0 SYS_setLineStyle_DASH eq {[] 0 setdash}
+                               {[SYS_setLineStyle_DASH] 0 setdash} ifelse
+} def
+%
+% GRAY setGrayScale (GRAY is 0 to 1)
+%
+/setGrayScale {
+    setgray
+} def
+%
+% X0 Y0 X1 Y1 WIDTH drawLine
+%
+/drawLine {
+    /SYS_drawLine_WIDTH  exch def
+    /SYS_drawLine_Y1     exch def
+    /SYS_drawLine_X1     exch def
+    /SYS_drawLine_Y0     exch def
+    /SYS_drawLine_X0     exch def
+    newpath
+    SYS_drawLine_WIDTH setlinewidth
+    SYS_drawLine_X0 c2p SYS_drawLine_Y0 l2p moveto
+    SYS_drawLine_X1 c2p SYS_drawLine_Y1 l2p lineto
+    stroke
+} def
+%
+% X0 Y0 X1 Y1 WIDTH XDELTA YDELTA REPEAT drawRepeatLine
+%
+/drawRepeatLine {
+    /SYS_drawRepeatLine_REPEAT exch def
+    /SYS_drawRepeatLine_YDELTA exch def
+    /SYS_drawRepeatLine_XDELTA exch def
+    /SYS_drawRepeatLine_WIDTH  exch def
+    /SYS_drawRepeatLine_Y1     exch def
+    /SYS_drawRepeatLine_X1     exch def
+    /SYS_drawRepeatLine_Y0     exch def
+    /SYS_drawRepeatLine_X0     exch def
+    SYS_drawRepeatLine_REPEAT {
+        SYS_drawRepeatLine_X0 SYS_drawRepeatLine_Y0
+        SYS_drawRepeatLine_X1 SYS_drawRepeatLine_Y1 
+        SYS_drawRepeatLine_WIDTH drawLine
+        SYS_drawRepeatLine_X0 SYS_drawRepeatLine_XDELTA add
+        /SYS_drawRepeatLine_X0 exch def
+        SYS_drawRepeatLine_Y0 SYS_drawRepeatLine_YDELTA add
+        /SYS_drawRepeatLine_Y0 exch def
+        SYS_drawRepeatLine_X1 SYS_drawRepeatLine_XDELTA add
+        /SYS_drawRepeatLine_X1 exch def
+        SYS_drawRepeatLine_Y1 SYS_drawRepeatLine_YDELTA add
+        /SYS_drawRepeatLine_Y1 exch def
+    } repeat
+} def
+%
+% X0 Y0 X1 Y1 WIDTH drawBox
+%
+/drawBox {
+    /SYS_drawBox_WIDTH exch def
+    /SYS_drawBox_Y1 exch def
+    /SYS_drawBox_X1 exch def
+    /SYS_drawBox_Y0 exch def
+    /SYS_drawBox_X0 exch def
+    SYS_drawBox_X0 SYS_drawBox_Y0 SYS_drawBox_X0 SYS_drawBox_Y1
+    SYS_drawBox_WIDTH drawLine
+    SYS_drawBox_X0 SYS_drawBox_Y1 SYS_drawBox_X1 SYS_drawBox_Y1 
+    SYS_drawBox_WIDTH drawLine
+    SYS_drawBox_X1 SYS_drawBox_Y1 SYS_drawBox_X1 SYS_drawBox_Y0 
+    SYS_drawBox_WIDTH drawLine
+    SYS_drawBox_X1 SYS_drawBox_Y0 SYS_drawBox_X0 SYS_drawBox_Y0 
+    SYS_drawBox_WIDTH drawLine
+} def 
+%
+% X0 Y0 X1 Y1 fillBox
+%
+/fillBox {
+    /SYS_fillBox_Y1 exch def
+    /SYS_fillBox_X1 exch def
+    /SYS_fillBox_Y0 exch def
+    /SYS_fillBox_X0 exch def
+    newpath
+    SYS_fillBox_X0 c2p SYS_fillBox_Y0 l2p moveto
+    SYS_fillBox_X0 c2p SYS_fillBox_Y1 l2p lineto
+    SYS_fillBox_X1 c2p SYS_fillBox_Y1 l2p lineto
+    SYS_fillBox_X1 c2p SYS_fillBox_Y0 l2p lineto
+    closepath
+    fill
+} def
+%
+% POINT FONT setChar
+%
+/FONT_NORMAL     0 def
+/FONT_ITALIC     1 def
+/FONT_BOLD       2 def
+/FONT_BOLDITALIC 3 def
+%
+/setChar {
+    /SYS_setChar_FONT exch def
+    /SYS_setChar_POINT exch def
+    SYS_setChar_FONT FONT_NORMAL eq {/Courier findfont} if
+    SYS_setChar_FONT FONT_ITALIC eq {/Courier_Italic findfont} if
+    SYS_setChar_FONT FONT_BOLD eq {/Courier_Bold findfont} if
+    SYS_setChar_FONT FONT_BOLDITALIC eq {/Courier_BoldItalic findfont} if
+    SYS_setChar_POINT scalefont
+    setfont
+} def 
+%
+% POINT KFONT setKanjiChar
+%
+/KFONT_RYUMIN   0 def
+/KFONT_RYUMIN_V 1 def
+/KFONT_GOTHIC   2 def
+/KFONT_GOTHIC_V 3 def
+%
+/setKanjiChar {
+    /SYS_setKanjiChar_KFONT exch def
+    /SYS_setKanjiChar_POINT exch def
+    SYS_setKanjiChar_KFONT KFONT_RYUMIN eq {/Ryumin-Light-H findfont} if
+    SYS_setKanjiChar_KFONT KFONT_RYUMIN_V eq {/Ryumin-Light-V findfont} if
+    SYS_setKanjiChar_KFONT KFONT_GOTHIC eq {/GothicBBB-Medium-H findfont} if
+    SYS_setKanjiChar_KFONT KFONT_GOTHIC_V eq {/GothicBBB-Medium-V findfont} if
+    SYS_setKanjiChar_POINT scalefont
+    setfont
+} def 
+%
+% X Y (TEXT) drawText
+% X Y <KANJI_TEXT> drawText
+%
+/drawText {
+    /SYS_drawText_TEXT exch def
+    /SYS_drawText_Y exch def
+    /SYS_drawText_X exch def
+    SYS_drawText_X c2p SYS_drawText_Y 1 add l2p moveto
+    SYS_drawText_TEXT show
+} def
+%
+% end system definition
+%
+%----------------------------------------------------------------------
+%
