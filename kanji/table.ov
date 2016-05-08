@@ -11,8 +11,8 @@
 % 10 FONT_NORMAL setChar
 0 setXgap
 0 setYgap
-1 0 <ÈÖ¹æ> drawText
-6 0 <»áÌ¾> drawText
-27 0 <À­ÊÌ> drawText
-31 0 <À¸Ç¯·îÆü> drawText
-42 0 <½»½ê> drawText
+1 0 <ç•ªå·> drawText
+6 0 <æ°å> drawText
+27 0 <æ€§åˆ¥> drawText
+31 0 <ç”Ÿå¹´æœˆæ—¥> drawText
+42 0 <ä½æ‰€> drawText

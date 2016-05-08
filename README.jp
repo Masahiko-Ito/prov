@@ -1,5 +1,5 @@
-prov-1.1 -- print overlay utilities
-Copyright (C) 2005  Masahiko Ito
+prov-2.0 -- print overlay utilities
+Copyright (C) 2013  Masahiko Ito
 
 These programs is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,95 +18,100 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 Mail suggestions and bug reports for these programs to
 m-ito@myh.no-ip.org
 
-prov�Ȥϲ���?
-=============
+prov2とは何か?
+==============
 
-  UNIX�ϥ����ƥ������ѤǤ���ե����४���Х쥤�����ġ���Ǥ���
+  UNIX系システム上で利用できるフォームオーバレイ印字ツールです。
 
-������
+  prov-1.x系では、内部処理のエンコーディングをEUC-JPで行っていたのを、
+  prov-2.x系ではUTF-8に変更しました。これにより、PUA(Private Use Area
+  = いわゆる外字)を含むUnicode範囲のフォントを利用して帳票を作成出来る
+  ようになりました。
+
+前提条件
 ========
 
-  postscript�����ե����������Ǥ���Ķ������˹��ۤ���Ƥ��뤳�ȡ�
+  postscript形式ファイルを印字できる環境が既に構築されていること。
 
-���󥹥ȡ���
+インストール
 ============
 
-  o Makefile���Խ���PROVDIR�ޥ����˥��󥹥ȡ�����ǥ��쥯�ȥ�򥻥å�
-    ���ޤ����ǥե���ȤΥ��󥹥ȡ���ǥ��쥯�ȥ��~/prov�Ǥ���
+  o Makefileを編集しPROV2DIRマクロにインストール先ディレクトリをセット
+    します。デフォルトのインストールディレクトリは~/prov2です。
   o make
   o make install
-  o ~/.profile�����Խ�����PROVDIR�Ķ��ѿ��˥��󥹥ȡ�����ǥ��쥯�ȥ��
-    ���åȤ��롣
-  o ~/.profile�����Խ�����PATH�Ķ��ѿ���${PROVDIR}/bin���ɲä��롣
+  o ~/.profile等を編集してPROV2DIR環境変数にインストール先ディレクトリを
+    セットする。
+  o ~/.profile等を編集してPATH環境変数に${PROV2DIR}/binを追加する。
 
-����ץ����(1)
+サンプル印字(1)
 ===============
 
-  prov -text mesh.ov README.jp | lpr -Pps-printer
+  prov2 -text mesh.ov README.jp | lpr -Pps-printer
 
   or
 
-  cat README.j | prov -text mesh.ov - | lpr -Pps-printer
+  cat README.j | prov2 -text mesh.ov - | lpr -Pps-printer
 
-  �嵭�����ǡ�README.jp(����ʸ��)��mesh.ov(�ֳݤ������Х쥤)��Ťͤ�
-  ps-printer����������ޤ���(������)Ⱦ��ʸ���Υǥե���Ȥ�12point��
-  ����ʸ���Υǥե���Ȥ�12point�ˤʤ�ޤ��������Τޤް������������1ʸ��
-  ������Ⱦ��2ʸ���������㴳û���ʤ�Τǡ�����åפ�2point����Ƥ��ޤ���
+  上記の操作で、README.jp(この文書)にmesh.ov(網掛けオーバレイ)を重ねて
+  ps-printerから印字します。(いわゆる)半角文字のデフォルトは12point、
+  全角文字のデフォルトも12pointになりますが、このまま印字すると全角1文字
+  の幅が半角2文字の幅より若干短くなるので、ギャップを2point入れています。
 
-  �ǥե���ȤΥݥ���ȿ�������åפϴĶ��ѿ����ѹ��Ǥ��ޤ���
+  デフォルトのポイント数、ギャップは環境変数で変更できます。
 
-  o PROV_ANK_POINT    (default 12)
-  o PROV_KANJI_POINT  (default 12)
-  o PROV_ANK_XGAP     (default 0)
-  o PROV_ANK_YGAP     (default 0)
-  o PROV_KANJI_XGAP   (default 2)
-  o PROV_KANJI_YGAP   (default 0)
+  o PROV2_ANK_POINT    (default 12)
+  o PROV2_KANJI_POINT  (default 12)
+  o PROV2_ANK_XGAP     (default 0)
+  o PROV2_ANK_YGAP     (default 0)
+  o PROV2_KANJI_XGAP   (default 2)
+  o PROV2_KANJI_YGAP   (default 0)
 
-  â�����κݤϡ�${PROVDIR}/etc/a4v.ps ��Υѥ�᡼��(SYS_Char, SYS_Line, 
-  SYS_Xbias, SYS_Ybias, SYS_MaxWidth, SYS_MaxHeight etc...)��Ĵ����ɬ��
-  �ˤʤ�Ǥ��礦��
+  但しその際は、${PROV2DIR}/etc/a4v.ps 内のパラメータ(SYS_Char, SYS_Line, 
+  SYS_Xbias, SYS_Ybias, SYS_MaxWidth, SYS_MaxHeight etc...)の調整が必要
+  になるでしょう。
 
-����ץ����(2)
+サンプル印字(2)
 ===============
 
-  prov -csv table.ov member.def member.dat | lpr -Pps-printer
+  prov2 -csv table.ov member.def member.dat | lpr -Pps-printer
 
   or
 
-  cat member.dat | prov -csv table.ov member.def - | lpr -Pps-printer
+  cat member.dat | prov2 -csv table.ov member.def - | lpr -Pps-printer
 
-  �嵭�����ǡ�member.dat(csv�����ǡ����ե�����)��member.def(�ե����ޥå�
-  ����ե�����)������˽��äƥե����ޥåȤ���table.ov(�ơ��֥륪���Х쥤���)
-  ��Ťͤ�ps-printer����������ޤ���
+  上記の操作で、member.dat(csv形式データファイル)をmember.def(フォーマット
+  定義ファイル)の定義に従ってフォーマットし、table.ov(テーブルオーバレイ定義)
+  を重ねてps-printerから印字します。
 
-����Ĵ��
+印字調整
 ========
 
-  ����Ĵ����${PROVDIR}/etc/a4v.ps���������Խ�������ǹԤ��ޤ���
+  印字調整を${PROV2DIR}/etc/a4v.ps内の定義を編集する事で行えます。
 
 % start user definition
 %------------------------------------------------------------------
 % < X unit length (point) >
 %
-% �����Х쥤�����Ģɼ�ե����ޥå������ǻ��ꤹ���ɸ�Ϥ�X����ñ��Ĺ��
-% ���ꤷ�ޤ����ǥե���Ȥ�72/10�ݥ����(=1/10�����)�Ǥ���
+% オーバレイ定義、帳票フォーマット定義中で指定する座標系のX軸の単位長を
+% 指定します。デフォルトは72/10ポイント(=1/10インチ)です。
 %
 /SYS_Char {72.00 10 div} def
 %
 %------------------------------------------------------------------
 % < Y unit length (point) >
 %
-% �����Х쥤�����Ģɼ�ե����ޥå������ǻ��ꤹ���ɸ�Ϥ�Y����ñ��Ĺ��
-% ���ꤷ�ޤ����ǥե���Ȥ�72/6�ݥ����(=1/6�����)�Ǥ���
+% オーバレイ定義、帳票フォーマット定義中で指定する座標系のY軸の単位長を
+% 指定します。デフォルトは72/6ポイント(=1/6インチ)です。
 %
 /SYS_Line {72.00  6 div} def
 %
 %------------------------------------------------------------------
 % < X bias (Char) >
 %
-% �ڡ������Τ�X�������ΰ�������Ĵ���˻��Ѥ��ޤ���
-% ���ˤ��餹 : �����ǻ���
-% ���ˤ��餹 : ����ǻ���
+% ページ全体のX軸方向の印字位置調整に使用します。
+% 右にずらす : 正数で指定
+% 左にずらす : 負数で指定
 %
 % for FUJITSU XL-5340
 %/SYS_Xbias {2 SYS_Char mul} def
@@ -116,9 +121,9 @@ prov�Ȥϲ���?
 %------------------------------------------------------------------
 % < Y bias (Line) >
 % 
-% �ڡ������Τ�Y�������ΰ�������Ĵ���˻��Ѥ��ޤ���
-% ���ˤ��餹 : �����ǻ���
-% ��ˤ��餹 : ����ǻ���
+% ページ全体のY軸方向の印字位置調整に使用します。
+% 下にずらす : 正数で指定
+% 上にずらす : 負数で指定
 %
 % for FUJITSU XL-5340
 %/SYS_Ybias {-2 SYS_Line mul} def
@@ -128,121 +133,135 @@ prov�Ȥϲ���?
 %------------------------------------------------------------------
 % < max printable width (Char) >
 %
-% �����������SYS_Charñ�̤ǻ��ꤷ�ޤ���
+% 最大印字幅をSYS_Char単位で指定します。
 %
 /SYS_MaxWidth 80 def
 %
 %------------------------------------------------------------------
 % < max printable height (Line) >
 %
-% ��������Կ���SYS_Lineñ�̤ǻ��ꤷ�ޤ���
+% 最大印字行数をSYS_Line単位で指定します。
 %
 /SYS_MaxHeight 66 def
 %
 %------------------------------------------------------------------
 % end user definition
 
-�������ޥ���
+カスタマイズ
 ============
 
- �ǥե���Ȥ�${PROVDIR}/etc/a4v.ps��A4�Ĥ��ѻ椬����ˤʤäƤޤ�������ʳ���
- �ѻ�����Ѥ���������a4v.ps�򥳥ԡ����ƥ������ޥ������Ƥ��������������ơ�
- �������ޥ��������ե���������Ѥ�����ϡ����Υե������Ķ��ѿ�PROVPS��
- ���ꤷ��prov���ޥ�ɤ����Ѥ��Ƥ���������
+ デフォルトの${PROV2DIR}/etc/a4v.psはA4縦の用紙が前提になってます。これ以外の
+ 用紙を利用したい場合はa4v.psをコピーしてカスタマイズしてください。そして、
+ カスタマイズしたファイルを利用する場合は、そのファイルを環境変数PROV2PSに
+ 設定してprov2コマンドを利用してください。
 
- (��) B4�Ĥ��ѻ�����Ѥ��������
+ (例) B4縦の用紙を利用したい場合
 
-  o cp ${PROVDIR}/etc/a4v.ps ./b4v.ps
-  o vi ./b4v.ps # B4���Ѥ��Խ�
-  o PROVPS=./b4v.ps prov -text foo.ov foo.txt | lpr -Pps-printer
+  o cp ${PROV2DIR}/etc/a4v.ps ./b4v.ps
+  o vi ./b4v.ps # B4縦用に編集
+  o PROV2PS=./b4v.ps prov2 -text foo.ov foo.txt | lpr -Pps-printer
 
-�����Х쥤���
+オーバレイ定義
 ==============
 
-  �ʲ��Υݥ��ȥ�����ץȥޥ�����Ȥäƥ����Х쥤��������ޤ���
+  以下のポストスクリプトマクロを使ってオーバレイを定義します。
 
   o DASH setLineStyle (DASH is 0 or 1 or ... )
 
-    �������ꤷ�ޤ���DASH=0�ϼ�����DASH��1�����ȤʤꡢDASH���ͤ��礭������
-    �Ƥ������Ȥʤ�ޤ���
+    線種を指定します。DASH=0は実線、DASH≧1破線となり、DASHの値が大きい程、
+    粗い破線となります。
 
   o GRAY setGrayScale (GRAY is 0 to 1)
 
-    ������ǻ������ꤷ�ޤ���0=�� -> 0.5=���� -> 1=��
+    印字の濃さを指定します。0=黒 -> 0.5=灰色 -> 1=白。
   
   o X0 Y0 X1 Y1 WIDTH drawLine
 
-    (X0,Y0)����(X1,Y1)��WIDTH�����������������ޤ���
-    (X0,Y0),(X1,Y1)��(ʸ��,��)��ɸ�ϤǤ���
-    WIDTH�ϥݥ���Ȼ���Ǥ���
+    (X0,Y0)から(X1,Y1)にWIDTHの太さの線を描きます。
+    (X0,Y0),(X1,Y1)は(文字,行)座標系です。
+    WIDTHはポイント指定です。
 
   o X0 Y0 X1 Y1 WIDTH XDELTA YDELTA REPEAT drawRepeatLine
 
-    (X0,Y0)-(X1,Y1)����X��ɸ��XDELTA,Y��ɸ��YDELTA������ʬ���ʤ���REPEAT�����
-    ���������ޤ���
+    (X0,Y0)-(X1,Y1)からX座標をXDELTA,Y座標をYDELTAだけ増分しながらREPEAT回数、
+    線を描きます。
 
   o X0 Y0 X1 Y1 WIDTH drawBox
 
-    WIDTH������������(X0,Y0)-(X1,Y1)���г����Ȥ���ͳѤ������ޤ���
+    WIDTHの太さの線で(X0,Y0)-(X1,Y1)を対角線とする四角を描きます。
       
   o X0 Y0 X1 Y1 fillBox
 
-    (X0,Y0)-(X1,Y1)���г����Ȥ���ͳѤ�����������ɤ�Ĥ֤��ޤ���
+    (X0,Y0)-(X1,Y1)を対角線とする四角を描き、中を塗りつぶします。
 
   o POINT FONT_NORMAL setChar
           FONT_ITALIC
           FONT_BOLD
           FONT_BOLDITALIC
 
-    (������)Ⱦ��ʸ�������ꤷ�ޤ���
+    (いわゆる)半角文字種を指定します。
+
+    a4v.ps, a4h.ps内で、
+      FONT_NORMAL は Courier
+      FONT_ITALIC は Courier_Italic
+      FONT_BOLD は Courier_Bold
+      FONT_BOLDITALIC は Courier_BoldItalic
+    へ対応づけています。
 
   o POINT KFONT_RYUMIN setKanjiChar
           KFONT_RYUMIN_V
           KFONT_GOTHIC
           KFONT_GOTHIC_V
 
-    (������)����ʸ�������ꤷ�ޤ���
+    (いわゆる)全角文字種を指定します。
 
+    a4v.ps, a4h.ps内で、
+      KFONT_RYUMIN は Ryumin-Light-UniJIS-UTF8-H
+      KFONT_RYUMIN_V は Ryumin-Light-UniJIS-UTF8-V
+      KFONT_GOTHIC は GothicBBB-Medium-UniJIS-UTF8-H
+      KFONT_GOTHIC_V は GothicBBB-Medium-UniJIS-UTF8-V
+    へ対応づけています。
+ 
   o GAP setXgap
 
-    X������ʸ���ֳ֤���ꤷ�ޤ���
+    X方向の文字間隔を指定します。
 
   o GAP setYgap
 
-    Y������ʸ���ֳ֤���ꤷ�ޤ���
+    Y方向の文字間隔を指定します。
 
   o X Y (TEXT) drawText
 
-    Ⱦ��ʸ����������ޤ���(X,Y)	��ʸ�����(��,��)��ؤ��ޤ���
+    半角文字列を描きます。(X,Y)	は文字列の(左,上)を指します。
 
   o X Y <KANJI_TEXT> drawText
 
-    ����ʸ����������ޤ���(X,Y)	��ʸ�����(��,��)��ؤ��ޤ���
+    全角文字列(UTF-8)を描きます。(X,Y) は文字列の(左,上)を指します。
 
-Ģɼ�ե����ޥå����
+帳票フォーマット定義
 ====================
 
-  csv�����ǡ����γƥե�����ɤ�Ģɼ��Ǥ���������������ޤ���
+  csv形式データの各フィールドの帳票上での配置等を定義します。
 
-  o �쥳�����ֹ梤�ե�������ֹ梤�ݥ���Ȣ�����ࢤ�饤��X�ֳ֢�Y�ֳ�
+  o レコード番号△フィールド番号△ポイント△カラム△ライン△X間隔△Y間隔
 
-    �쥳�����ֹ�   : �̾��1�򥻥åȤ��롣1�ڡ����Υ쥤�����Ȥ�ʣ����csv����
-                     �ǡ����쥳���ɤǹ����������2�ʾ�λ����Ǥ��롣
-    �ե�������ֹ� : csv�����ǡ����쥳������Υե�����ɤ���ꤹ�롣1���ꥸ��
-    �ݥ����       : �����Υݥ���ȿ�����ꤹ�롣
-    �����         : �������ϤΥ������֤���ꤹ�롣
-    �饤��         : �������ϤΥ饤����֤���ꤹ�롣
-    X�ֳ�          : ��������ʸ���ֳ֤���ꤹ�롣
-    Y�ֳ�          : ��������ʸ���ֳ֤���ꤹ�롣
+    レコード番号   : 通常は1をセットする。1ページのレイアウトを複数のcsv形式
+                     データレコードで構成する場合は2以上の指定もできる。
+    フィールド番号 : csv形式データレコード内のフィールドを指定する。1オリジン。
+    ポイント       : 印字のポイント数を指定する。
+    カラム         : 印字開始のカラム位置を指定する。
+    ライン         : 印字開始のライン位置を指定する。
+    X間隔          : 横方向の文字間隔を指定する。
+    Y間隔          : 縦方向の文字間隔を指定する。
 
-  �ƥե�����ɤΥ��ѥ졼����TAB�Ǥ��롣
+  各フィールドのセパレータはTABである。
 
-csv�����ǡ����ե�����
+csv形式データファイル
 =====================
   
-  o �ƥե�����ɤΥ��ѥ졼����TAB�Ǥ��롣
-  o �ƥե�����ɤ�Ⱦ��ʸ��/����ʸ���κ��ߤ��Բ�ǽ�Ǥ��롣
+  o 各フィールドのセパレータはTABである。
+  o 各フィールドに半角文字/全角文字の混在は不可能である。
 
 -- 
 Masahiko Ito <m-ito@myh.no-ip.org>
-http://myh.no-ip.org/~prov/
+http://myh.no-ip.org/~prov2/

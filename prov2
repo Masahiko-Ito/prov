@@ -4,28 +4,29 @@
 #        prov -csv OVERLAY DEFFILE CSVFILE ...
 #
 # nkf is Network Kanji Filter (code converter)
-NKF="nkf -X -e"
+NKF="nkf -x -w80"
 #NKF="cat"
 #
-if [ "X${PROVDIR}" = "X" ]
+if [ "X${PROV2DIR}" = "X" ]
 then
-    PROVDIR=/usr/local/prov;export PROVDIR
+#    PROV2DIR=/usr/local/prov2;export PROV2DIR
+    PROV2DIR=~/prov2;export PROV2DIR
 fi
 #
-AWKDIR=${PROVDIR}/awk
-BINDIR=${PROVDIR}/bin
-ETCDIR=${PROVDIR}/etc
+AWKDIR=${PROV2DIR}/awk
+BINDIR=${PROV2DIR}/bin
+ETCDIR=${PROV2DIR}/etc
 #
-if [ "X${PROVPS}" = "X" ]
+if [ "X${PROV2PS}" = "X" ]
 then
-    PROVPS=${ETCDIR}/a4v.ps;export PROVPS
+    PROV2PS=${ETCDIR}/a4v.ps;export PROV2PS
 fi
 #
 case $1 in
 -text)
-    if [ "X${PROV_KANJI_XGAP}" = "X" ]
+    if [ "X${PROV2_KANJI_XGAP}" = "X" ]
     then
-        PROV_KANJI_XGAP=2;export PROV_KANJI_XGAP
+        PROV2_KANJI_XGAP=2;export PROV2_KANJI_XGAP
     fi
 #
     ${NKF} $2 |\
@@ -37,8 +38,8 @@ case $1 in
         input=`echo $i | sed -e 's/^-$//'`
         ${NKF} ${input} |\
         expand -t 8 |\
-        ${BINDIR}/t2p -l `grep '^/SYS_MaxHeight *[0-9]* *def' ${PROVPS}|head -1|sed -e 's/^\/SYS_MaxHeight *//' -e 's/ *def$//'`|\
-        ${BINDIR}/ovps ${PROVPS} /tmp/prov.$$
+        ${BINDIR}/t2p -l `grep '^/SYS_MaxHeight *[0-9]* *def' ${PROV2PS}|head -1|sed -e 's/^\/SYS_MaxHeight *//' -e 's/ *def$//'`|\
+        ${BINDIR}/ovps ${PROV2PS} /tmp/prov.$$
         echo "grestore"
     done
     rm /tmp/prov.$$
@@ -56,7 +57,7 @@ case $1 in
         ${BINDIR}/brckt |\
         ${BINDIR}/k2c |\
         awk -f ${AWKDIR}/csv2ps.awk $deffile - |\
-        ${BINDIR}/ovps ${PROVPS} /tmp/prov.$$
+        ${BINDIR}/ovps ${PROV2PS} /tmp/prov.$$
         echo "grestore"
     done
     rm /tmp/prov.$$

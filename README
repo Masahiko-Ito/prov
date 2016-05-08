@@ -1,4 +1,4 @@
-prov-1.1 -- print overlay utilities
+prov-2.0 -- print overlay utilities
 Copyright (C) 2008  Masahiko Ito
 
 These programs is free software; you can redistribute it and/or modify
@@ -18,8 +18,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 Mail suggestions and bug reports for these programs to
 m-ito@myh.no-ip.org
 
-What is prov ?
-==============
+What is prov2 ?
+===============
 
   This is form overlay printing tool on UNIX-like systems.
 
@@ -31,42 +31,42 @@ prerequisite
 Install
 =======
 
-  o edit Makefile to set install directory to PROVDIR macro
-    default install directory is ~/prov.
+  o edit Makefile to set install directory to PROV2DIR macro
+    default install directory is ~/prov2.
   o make
   o make install
-  o edit ~/.profile to set install directory to PROVDIR environment variable.
-  o edit ~/.profile to set ${PROVDIR}/bin to PATH environment variable.
+  o edit ~/.profile to set install directory to PROV2DIR environment variable.
+  o edit ~/.profile to set ${PROV2DIR}/bin to PATH environment variable.
 
 Sample print(1)
 ===============
 
-  prov -text mesh.ov README | lpr -Pps-printer
+  prov2 -text mesh.ov README | lpr -Pps-printer
 
   or
 
-  cat README | prov -text mesh.ov - | lpr -Pps-printer
+  cat README | prov2 -text mesh.ov - | lpr -Pps-printer
 
   above operation printout README(this document) overlayed
   mesh.ov(mesh overlay definition) from ps-printer.
   default point of ank is 12point and default point of kanji char is 12point too.
   you can change default point by setting environment variable.
 
-  o PROV_ANK_POINT    (default 12)
-  o PROV_KANJI_POINT  (default 12)
-  o PROV_ANK_XGAP     (default 0)
-  o PROV_ANK_YGAP     (default 0)
-  o PROV_KANJI_XGAP   (default 2)
-  o PROV_KANJI_YGAP   (default 0)
+  o PROV2_ANK_POINT    (default 12)
+  o PROV2_KANJI_POINT  (default 12)
+  o PROV2_ANK_XGAP     (default 0)
+  o PROV2_ANK_YGAP     (default 0)
+  o PROV2_KANJI_XGAP   (default 2)
+  o PROV2_KANJI_YGAP   (default 0)
 
 Sample print(2)
 ===============
 
-  prov -csv table.ov member.def member.dat | lpr -Pps-printer
+  prov2 -csv table.ov member.def member.dat | lpr -Pps-printer
 
   or
 
-  cat member.dat | prov -csv table.ov member.def - | lpr -Pps-printer
+  cat member.dat | prov2 -csv table.ov member.def - | lpr -Pps-printer
 
   above operation printout member.dat(csv data file) formatted by
   member.def(format definition) and overlayed table.ov(table overlay
@@ -75,7 +75,7 @@ Sample print(2)
 Adjust setting
 ==============
 
-  You can adjust setting by editing ${PROVDIR}/etc/a4v.ps.
+  You can adjust setting by editing ${PROV2DIR}/etc/a4v.ps.
 
 % start user definition
 %------------------------------------------------------------------
@@ -130,15 +130,15 @@ Adjust setting
 Customize
 =========
 
- In default ${PROVDIR}/etc/a4v.ps is for A4-porrait paper. if you want to
- use another paper, copy ${PROVDIR}/etc/a4v.ps to another.ps and edit it and
- set path to another.ps into PROVPS(environment variable).
+ In default ${PROV2DIR}/etc/a4v.ps is for A4-porrait paper. if you want to
+ use another paper, copy ${PROV2DIR}/etc/a4v.ps to another.ps and edit it and
+ set path to another.ps into PROV2PS(environment variable).
 
  ex. 
 
-  o cp ${PROVDIR}/etc/a4v.ps ./another.ps
+  o cp ${PROV2DIR}/etc/a4v.ps ./another.ps
   o vi ./another.ps # edit for another paper
-  o PROVPS=./another.ps prov -text foo.ov foo.txt | lpr -Pps-printer
+  o PROV2PS=./another.ps prov2 -text foo.ov foo.txt | lpr -Pps-printer
 
 Overlay definition
 ==================

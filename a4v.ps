@@ -13,15 +13,9 @@ gsave
 %
 % < X bias (Char) >
 %
-% for FUJITSU XL-5340
-%/SYS_Xbias {2 SYS_Char mul} def
-%
 /SYS_Xbias {0 SYS_Char mul} def
 %
 % < Y bias (Line) >
-%
-% for FUJITSU XL-5340
-%/SYS_Ybias {-2 SYS_Line mul} def
 %
 /SYS_Ybias {0 SYS_Line mul} def
 %
@@ -174,10 +168,10 @@ gsave
 /setKanjiChar {
     /SYS_setKanjiChar_KFONT exch def
     /SYS_setKanjiChar_POINT exch def
-    SYS_setKanjiChar_KFONT KFONT_RYUMIN eq {/Ryumin-Light-H findfont} if
-    SYS_setKanjiChar_KFONT KFONT_RYUMIN_V eq {/Ryumin-Light-V findfont} if
-    SYS_setKanjiChar_KFONT KFONT_GOTHIC eq {/GothicBBB-Medium-H findfont} if
-    SYS_setKanjiChar_KFONT KFONT_GOTHIC_V eq {/GothicBBB-Medium-V findfont} if
+    SYS_setKanjiChar_KFONT KFONT_RYUMIN eq {/Ryumin-Light-UniJIS-UTF8-H findfont} if
+    SYS_setKanjiChar_KFONT KFONT_RYUMIN_V eq {/Ryumin-Light-UniJIS-UTF8-V findfont} if
+    SYS_setKanjiChar_KFONT KFONT_GOTHIC eq {/GothicBBB-Medium-UniJIS-UTF8-H findfont} if
+    SYS_setKanjiChar_KFONT KFONT_GOTHIC_V eq {/GothicBBB-Medium-UniJIS-UTF8-V findfont} if
     SYS_setKanjiChar_POINT scalefont
     setfont
 } def 
@@ -193,7 +187,6 @@ gsave
     /SYS_drawText_Y exch def
     /SYS_drawText_X exch def
     SYS_drawText_X c2p SYS_drawText_Y 1 add l2p moveto
-%    SYS_drawText_TEXT show
     SYS_drawText_Xgap SYS_drawText_Ygap SYS_drawText_TEXT ashow
 } def
 %
@@ -212,4 +205,3 @@ gsave
 % end system definition
 %
 %----------------------------------------------------------------------
-%
