@@ -56,7 +56,7 @@ Sample print(1)
   o PROV2_KANJI_POINT  (default 12)
   o PROV2_ANK_XGAP     (default 0)
   o PROV2_ANK_YGAP     (default 0)
-  o PROV2_KANJI_XGAP   (default 2)
+  o PROV2_KANJI_XGAP   (default 2.4)
   o PROV2_KANJI_YGAP   (default 0)
 
 Sample print(2)

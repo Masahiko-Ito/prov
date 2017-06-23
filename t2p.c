@@ -14,7 +14,7 @@
 #define KANJI_POINT "12"
 #define ANK_XGAP "0"
 #define ANK_YGAP "0"
-#define KANJI_XGAP "0"
+#define KANJI_XGAP "2.4"
 #define KANJI_YGAP "0"
 
 main(argc, argv)

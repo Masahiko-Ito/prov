@@ -64,7 +64,7 @@ prov2とは何か?
   o PROV2_KANJI_POINT  (default 12)
   o PROV2_ANK_XGAP     (default 0)
   o PROV2_ANK_YGAP     (default 0)
-  o PROV2_KANJI_XGAP   (default 2)
+  o PROV2_KANJI_XGAP   (default 2.4)
   o PROV2_KANJI_YGAP   (default 0)
 
   但しその際は、${PROV2DIR}/etc/a4v.ps 内のパラメータ(SYS_Char, SYS_Line, 
