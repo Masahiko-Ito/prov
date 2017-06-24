@@ -9,9 +9,9 @@
 %
 /OV_LINE 0 def
 %
-% repeat 67 times { ... }
+% repeat 71 times { ... }
 %
-67 {
+71 {
 %
 % line (0,OV_LINE)-(80,OV_LINE)
 %
@@ -34,9 +34,9 @@
 %
 81 {
 %
-% line (OV_COL,0)-(OV_COL,66)
+% line (OV_COL,0)-(OV_COL,70)
 %
-    OV_COL 0 OV_COL 66 1 drawLine
+    OV_COL 0 OV_COL 70 1 drawLine
 %
 % down mesh to 2 line
 %

@@ -9,9 +9,9 @@
 %
 /OV_LINE 0 def
 %
-% repeat 33 times { ... }
+% repeat 35 times { ... }
 %
-33 {
+35 {
 %
 % overlay mesh on (0,OV_LINE)-(80,OV_LINE+1) rectangle
 %
