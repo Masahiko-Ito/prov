@@ -51,7 +51,7 @@ prov2とは何か?
 
   or
 
-  cat README.j | prov2 -text mesh.ov - | lpr -Pps-printer
+  cat README.jp | prov2 -text mesh.ov - | lpr -Pps-printer
 
   上記の操作で、README.jp(この文書)にmesh.ov(網掛けオーバレイ)を重ねて
   ps-printerから印字します。(いわゆる)半角文字のデフォルトは12point、
