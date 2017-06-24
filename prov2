@@ -38,7 +38,7 @@ case $1 in
         input=`echo $i | sed -e 's/^-$//'`
         ${NKF} ${input} |\
         expand -t 8 |\
-        ${BINDIR}/t2p -l `grep '^/SYS_MaxHeight *[0-9]* *def' ${PROV2PS}|head -1|sed -e 's/^\/SYS_MaxHeight *//' -e 's/ *def$//'`|\
+        ${BINDIR}/t2p -l `grep '^/SYS_MaxHeight *[0-9\.]* *def' ${PROV2PS}|head -1|sed -e 's/^\/SYS_MaxHeight *//' -e 's/ *def$//'`|\
         ${BINDIR}/ovps ${PROV2PS} /tmp/prov.$$
         echo "grestore"
     done
