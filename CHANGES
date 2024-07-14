@@ -1,3 +1,4 @@
+2.x: 2024.07.14 some fixes for brckt.c k2c.c ovps.c t2p.c
 2.2: 2017.06.25 change SYS_MaxWidth, SYS_MaxHeight in a4v.ps etc
 2.1: 2017.06.24 change default PROV_KANJI_XGAP 2.0 to 2.4
 2.0: 2013.07.15 change encoding to UTF-8

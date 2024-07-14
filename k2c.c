@@ -2,6 +2,10 @@
  *  UTF-8 to HEX string converter
  */
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+int ShowUsage();
+
 int main(argc, argv)
 	int argc;
 	char *argv[];
@@ -30,7 +34,7 @@ int main(argc, argv)
 	}
 }
 
-ShowUsage()
+int ShowUsage()
 {
 	fprintf(stderr, "Usage: k2c [OPTION]\n");
 	fprintf(stderr, "\n");

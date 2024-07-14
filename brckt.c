@@ -2,9 +2,13 @@
  *  bracket field of csv
  */
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define DELIM '\t'
 #define BUFMAX 4096
+
+int ShowUsage();
 
 int main(argc, argv)
 	int argc;
@@ -63,7 +67,7 @@ int main(argc, argv)
 	}
 }
 
-ShowUsage()
+int ShowUsage()
 {
 	fprintf(stderr, "Usage: brckt [OPTION]\n");
 	fprintf(stderr, "\n");

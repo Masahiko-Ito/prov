@@ -17,7 +17,9 @@
 #define KANJI_XGAP "2.4"
 #define KANJI_YGAP "0"
 
-main(argc, argv)
+int ShowUsage();
+
+int main(argc, argv)
 	int argc;
 	char *argv[];
 {
@@ -94,7 +96,7 @@ main(argc, argv)
 	}
 	kanji_ygap[(sizeof kanji_ygap) - 1] = '\0';
 
-	while (fgets(buf, MAXBUF, stdin) != (char) NULL) {
+	while (fgets(buf, MAXBUF, stdin) != (char *) NULL) {
 		col = 0;
 		for (i = 0; i <= strlen(buf); /* do nothing */ ) {
 			if (buf[i] == ' ') {
@@ -188,7 +190,7 @@ main(argc, argv)
 	}
 }
 
-ShowUsage()
+int ShowUsage()
 {
 	fprintf(stderr, "Usage: t2p [OPTION]\n");
 	fprintf(stderr, "\n");

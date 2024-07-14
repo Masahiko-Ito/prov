@@ -2,6 +2,7 @@
  *  ps + overlay concatenate
  */
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 
@@ -10,7 +11,13 @@
 #define OFF 0
 #define ON  1
 
-main(argc, argv)
+int initialize();
+int mainloop();
+int terminate();
+int overlay();
+int ShowUsage();
+
+int main(argc, argv)
 	int argc;
 	char *argv[];
 {
@@ -20,7 +27,7 @@ main(argc, argv)
 	exit(0);
 }
 
-initialize(argc, argv)
+int initialize(argc, argv)
 	int argc;
 	char **argv;
 {
@@ -46,7 +53,7 @@ initialize(argc, argv)
 	return 0;
 }
 
-mainloop(argc, argv)
+int mainloop(argc, argv)
 	int argc;
 	char **argv;
 {
@@ -104,14 +111,14 @@ mainloop(argc, argv)
 }
 
 
-terminate(argc, argv)
+int terminate(argc, argv)
 	int argc;
 	char **argv;
 {
 	return 0;
 }
 
-overlay(ov_fp)
+int overlay(ov_fp)
 	FILE *ov_fp;
 {
 	char buf[MAXBUF + 1];
@@ -123,7 +130,7 @@ overlay(ov_fp)
 	return 0;
 }
 
-ShowUsage()
+int ShowUsage()
 {
 	fprintf(stderr,
 		"Usage: ovps HEADER.ps OVERLAY.ps [FILE.ps] ...\n");
